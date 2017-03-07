@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane alignment="CENTER" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="600.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="158.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="501.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="485.0" minWidth="10.0" prefWidth="43.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="129.0" minHeight="10.0" prefHeight="88.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="187.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="187.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="246.0" minHeight="10.0" prefHeight="146.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="%label.selectJar" />
+            <Label text="%label.selectFile" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="selectClass" pickOnBounds="false" prefHeight="23.0" prefWidth="480.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            										<items>
+													</items>
+            </ChoiceBox>
+            <GridPane GridPane.columnIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="360.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="47.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextField fx:id="showSelectedFile" editable="false" prefHeight="23.0" prefWidth="335.0" />
+                  <Button fx:id="fileSelect" mnemonicParsing="false" onAction="#selectJar" prefHeight="23.0" prefWidth="102.0" text="%key.selectJar" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="ok" mnemonicParsing="false" onAction="#okAction" prefHeight="23.0" prefWidth="109.0" text="%key.ok" />
+                  <Button fx:id="cancel" mnemonicParsing="false" onAction="#cancelAction" prefHeight="23.0" prefWidth="109.0" text="%key.cancel" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            <CheckBox fx:id="addAll" mnemonicParsing="false" onAction="#addAll" text="%key.addAll" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+   </children>
+</Pane>

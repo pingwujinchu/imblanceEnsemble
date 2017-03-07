@@ -47,6 +47,8 @@
 												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
 												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
 												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
 											</columnConstraints>
 											<rowConstraints>
 												<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -65,9 +67,6 @@
 													<GridPane.margin>
 														<Insets />
 													</GridPane.margin>
-													<effect>
-														<Glow />
-													</effect>
 												</ChoiceBox>
 												<ChoiceBox fx:id="ensemble" prefWidth="150.0" value="Boosting" GridPane.columnIndex="5">
 													<items>
@@ -76,9 +75,6 @@
 															<String fx:value="Boosting" />
 														</FXCollections>
 													</items>
-													<effect>
-														<Glow />
-													</effect>
 												</ChoiceBox>
 												<Label text="%key.ensemble" GridPane.columnIndex="4" />
 												<ChoiceBox fx:id="base" prefWidth="150.0" GridPane.columnIndex="7">
@@ -88,14 +84,16 @@
 												<Label text="%key.base" GridPane.columnIndex="6" />
                                     <Label text="%key.in" GridPane.columnIndex="2" />
                                     <CheckBox fx:id="in" mnemonicParsing="false" GridPane.columnIndex="3" />
+                                    <Button fx:id="add" mnemonicParsing="false" onAction="#addAlgAction" text="%key.add" GridPane.columnIndex="9" />
+                                    <Button fx:id="clear" mnemonicParsing="false" onAction="#clearAction" text="%key.clear" GridPane.columnIndex="8" />
 											</children>
 										</GridPane>
 										<Button fx:id="start" mnemonicParsing="false" onAction="#startAction" prefHeight="23.0" prefWidth="84.0" text="%key.start" GridPane.rowIndex="2" />
 										<ListView fx:id="listView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
 									</children>
 									<columnConstraints>
-										<ColumnConstraints halignment="CENTER" maxWidth="200.0" minWidth="10.0" prefWidth="119.0" />
-										<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="481.0" />
+										<ColumnConstraints halignment="CENTER" maxWidth="200.0" minWidth="10.0" prefWidth="125.0" />
+										<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="475.0" />
 									</columnConstraints>
 									<rowConstraints>
 										<RowConstraints maxHeight="10.0" minHeight="4.0" prefHeight="9.0" valignment="CENTER" vgrow="SOMETIMES" />
@@ -107,20 +105,41 @@
 							</content>
 						</Tab>
 						<Tab text="%key.result">
-							<content>
-								<SplitPane prefHeight="200.0" prefWidth="200.0">
-									<items>
-										<BarChart>
-											<xAxis>
-												<CategoryAxis side="BOTTOM" />
-											</xAxis>
-											<yAxis>
-												<NumberAxis side="LEFT" />
-											</yAxis>
-										</BarChart>
-									</items>
-								</SplitPane>
-							</content>
+                     <content>
+                        <GridPane gridLinesVisible="true" snapToPixel="false">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="73.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="538.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="52.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                <columnConstraints>
+                                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="50.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="28.0" minHeight="10.0" prefHeight="28.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="325.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <TextField fx:id="filter" prefHeight="23.0" prefWidth="94.0" />
+                                    <ListView fx:id="selectShow" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                                 </children>
+                              </GridPane>
+                              <BarChart fx:id="chart" GridPane.columnIndex="1">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" fx:id="xlabel" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis fx:id="ylabel" side="LEFT" />
+                                </yAxis>
+                              </BarChart>
+                           </children>
+                        </GridPane>
+                     </content>
 						</Tab>
 					</tabs>
 				</TabPane>

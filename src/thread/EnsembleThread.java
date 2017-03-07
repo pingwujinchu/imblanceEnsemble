@@ -3,6 +3,7 @@ package thread;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import application.Log;
 import application.Main;
@@ -17,18 +18,34 @@ public class EnsembleThread implements Runnable {
 	String project;
 	String simpleSelected;
 	String ensembleSelected;
-	String baseSelected;
+	List<String> baseSelected;
 	boolean isIn;
 	TextArea resultView;
 	Button start;
 	ProgressBar pb;
 	ListView listView;
-	String result;
+	ListView selectShow;
+	List<Log> result;
 
 	public static boolean stop = false;
 
-	public EnsembleThread(String project, String simpleSelected, String ensembleSelected, String baseSelected,
-			boolean isIn, TextArea resultView, Button start, ProgressBar pb, ListView listView) {
+//	public EnsembleThread(String project, String simpleSelected, String ensembleSelected, String baseSelected,
+//			boolean isIn, TextArea resultView, Button start, ProgressBar pb, ListView listView,ListView selectShow) {
+//		super();
+//		this.project = project;
+//		this.simpleSelected = simpleSelected;
+//		this.ensembleSelected = ensembleSelected;
+//		this.baseSelected = baseSelected;
+//		this.isIn = isIn;
+//		this.resultView = resultView;
+//		this.start = start;
+//		this.pb = pb;
+//		this.listView = listView;
+//		this.selectShow = selectShow;
+//	}
+	
+	public EnsembleThread(String project, String simpleSelected, String ensembleSelected, List<String> baseSelected,
+			boolean isIn, TextArea resultView, Button start, ProgressBar pb, ListView listView,ListView selectShow) {
 		super();
 		this.project = project;
 		this.simpleSelected = simpleSelected;
@@ -39,6 +56,7 @@ public class EnsembleThread implements Runnable {
 		this.start = start;
 		this.pb = pb;
 		this.listView = listView;
+		this.selectShow = selectShow;
 	}
 
 	@Override
@@ -71,9 +89,11 @@ public class EnsembleThread implements Runnable {
 			e.printStackTrace();
 		}
 
-		resultView.setText(
-				"project, method, classifier, accuracy, recall-0, recall-1, precision-0, precision-1, fMeasure-0, fMeasure-1, gmean, auc ");
-		resultView.appendText("\n" + result);
+//		resultView.setText(
+//				"project, method, classifier, accuracy, recall-0, recall-1, precision-0, precision-1, fMeasure-0, fMeasure-1, gmean, auc ");
+		for(int i = 0 ; i < result.size() ; i++){
+		   resultView.setText(result.get(i).getResultInfo());
+		}
 		Platform.runLater(new Runnable() {
 
 			@Override
@@ -81,12 +101,12 @@ public class EnsembleThread implements Runnable {
 				// TODO Auto-generated method stub
 				start.setText("¿ªÊ¼");
 				pb.setProgress(1);
-				Date d = new Date();
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				Log log = new Log(sdf.format(d) + "-" + baseSelected,result);
-				listView.getItems().add(log);
+				for(int i = 0 ; i < result.size() ; i++){
+				  Log log = result.get(i);
+				  listView.getItems().add(log);
+				  selectShow.getItems().add(log);
+				}
 			}
 		});
 	}
-
 }
