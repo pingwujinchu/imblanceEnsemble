@@ -8,9 +8,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +34,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -50,6 +54,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -67,14 +72,17 @@ public class Main extends Application{
 	@FXML
 	public Button start;
 	@FXML ListView listView;
-	@FXML ChoiceBox ensemble;
-	@FXML CheckBox in;
+
+
 	@FXML TextArea resultView;
 	@FXML ProgressBar pb;
 	@FXML ListView selectShow;
 	@FXML BarChart chart;
 	@FXML CategoryAxis xlabel;
 	@FXML NumberAxis ylabel;
+	@FXML ListView textShow;
+	@FXML TabPane tp;
+
 	Stage stage = null;
 	static Stage dialog = null;
 	static volatile Properties pro;
@@ -112,7 +120,7 @@ public class Main extends Application{
 				@Override
 				public void changed(ObservableValue<? extends Log> observable, Log oldValue, Log newValue) {
 					// TODO Auto-generated method stub
-					resultView.setText(newValue.getResultInfo());
+					resultView.setText(newValue.getAllInfo());
 				}
 			});  
 			
@@ -129,6 +137,15 @@ public class Main extends Application{
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+	   stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		
+		@Override
+		public void handle(WindowEvent event) {
+			// TODO Auto-generated method stub
+			Start.finish = true;
+		}
+	});
 	}
 	
 	public static void main(String[] args) {
@@ -138,12 +155,11 @@ public class Main extends Application{
 	 @FXML
 	 protected void chooseFileAction(ActionEvent event){
 		 
-		 FileChooser fc = new FileChooser();
+		 final DirectoryChooser fc = new DirectoryChooser();
 		 fc.setTitle("选择数据集");
 		 fc.setInitialDirectory(new File("/"));
-		 ExtensionFilter ef=new ExtensionFilter("arff","*.arff");
-		 fc.getExtensionFilters().add(ef);
-		 File f = fc.showOpenDialog(stage);
+
+		 File f  = fc.showDialog(stage);
 		 if(f != null && f.exists()){
 			 fileName.setText(f.getAbsolutePath());
 //			 opfile.setDisable(true);
@@ -180,9 +196,20 @@ public class Main extends Application{
                   return;
 			  }
 			  start.setText("结束");
-			  String project = fileName.getText();
-			  String simpleSelected = (String) simple.getValue();
-			  String ensembleSelected = (String) ensemble.getValue();
+			 
+              List<String> dataSetList = new ArrayList();
+			  
+			  if(simple.getValue() == null){
+				  Alert _alert = new Alert(Alert.AlertType.INFORMATION);
+				  _alert.setTitle("提示");
+				  _alert.setHeaderText(null);
+				  _alert.setContentText("请选择采样+集成方法");
+				  _alert.initOwner(stage);
+				  _alert.show();
+				  start.setText("开始");
+				  return;
+			  }
+			  
 			  if(base.getValue() == null){
 				  Alert _alert = new Alert(Alert.AlertType.INFORMATION);
 				  _alert.setTitle("提示");
@@ -193,6 +220,27 @@ public class Main extends Application{
 				  start.setText("开始");
 				  return;
 			  }
+			  
+			  File allF = new File(fileName.getText());
+			  File[] files = allF.listFiles();
+			  for(int i = 0 ; i < files.length ; i++){
+				  if(files[i].getName().endsWith(".arff")){
+					  dataSetList.add(files[i].getAbsolutePath());
+				  }
+			  }
+			  if(dataSetList.size() == 0){
+				  Alert _alert = new Alert(Alert.AlertType.INFORMATION);
+				  _alert.setTitle("提示");
+				  _alert.setHeaderText(null);
+				  _alert.setContentText("所选择的文件夹中没有数据集，请重新选择。");
+				  _alert.initOwner(stage);
+				  _alert.show();
+				  start.setText("开始");
+				  return;
+			  }
+			  Start.finish = false;
+			  String simpleSelected = (String) simple.getValue();
+			  String[] method = simpleSelected.split("\\s");
 			  try {
 				pro.load(new FileInputStream("setting/baseClassification.properties"));
 			} catch (FileNotFoundException e1) {
@@ -202,41 +250,75 @@ public class Main extends Application{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			  
+				Date d = new Date();
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+				String logInfo = fileName.getText().substring( fileName.getText().lastIndexOf("\\")+1,  fileName.getText().length())+" & ";
+			  List<String> alList = new ArrayList();    //添加所有基分类器
 			  if(base.getValue().equals("All")){
-				  List alList = new ArrayList();
+				  logInfo += "All";
 				  List<String> all = base.getItems();
 				  for(String key : all){
 					  if(!key.equals("All")){
 					     alList.add(pro.getProperty(key));
 					  }
 				  }
-				  boolean isIn = in.isSelected();
+			  }else{
+				  String baseSelected = pro.getProperty((String) base.getValue());
+				  alList.add(baseSelected);
+				  logInfo += baseSelected;
+			  }
+			  
+			  ///=========================================================================
+			  //1:Bagging embedded SMOTE;2:Bagging over SMOTE;3:Boosting embedded SMOTE;4:Boosting over SMOTE
+			  //5:Bagging embedded OverSample;6:Bagging over OverSample;7:Boosting embedded OverSample;8:Boosting over OverSample
+			  //9:Bagging embedded UnderSample;10:Bagging over UnderSample;11:Boosting embedded UnderSample;12:Boosting over UnderSample
+			  //13:Bagging;14:Boosting
+			  //============================================================================
+			  List<Method> methodList = new ArrayList();  //添加所有方法
+			  if(simple.getValue().equals("All")){
+				   logInfo += " & All";
+				   List allItem = simple.getItems();
+				   for(int i = 0 ; i < allItem.size() ; i++){
+					      String value = (String) allItem.get(i);
+						  Method currMd = null;
+						  if(value.equals("All")){
+						     continue;
+						  }
+						  if(value.contains("_")){
+							  String allStr [] = value.split("_");
+							  currMd = new Method(i + 1, allStr[2], allStr[1], allStr[0]);
+						  }else{
+							     currMd = new Method(i + 1, "", "", value);
+							  }
+						  methodList.add(currMd);
+				   }
+			  }else{
+				  int index =  simple.getItems().indexOf(simple.getItems().indexOf(simple.getValue()));
+				  String value = (String) simple.getValue();
+				  logInfo += " & "+value;
+				  Method currMd = null;
+				  if(value.contains("_")){
+					  String allStr [] = value.split("_");
+					  currMd = new Method(index + 1, allStr[2], allStr[1], allStr[0]);
+				  }else{
+					  currMd = new Method(index + 1, "", "", value);
+				  }
+				  methodList.add(currMd);
+			  }
+			  logInfo = sdf.format(d)+"-" + logInfo;
 				  try {
-				    	EnsembleThread enThread = new EnsembleThread(project, simpleSelected, ensembleSelected, alList, isIn, resultView,start,pb,listView,selectShow);
+				    	EnsembleThread enThread = new EnsembleThread(dataSetList,methodList, alList, resultView,start,pb,listView,selectShow,logInfo);
 					    Thread t = new Thread(enThread);
 					    t.start();
 				       } catch (Exception e) {
 					// TODO Auto-generated catch block
 				      	e.printStackTrace();
-				       }
-			  }else{
-			      String baseSelected = pro.getProperty((String) base.getValue());
-			      List alList = new ArrayList();
-			      alList.add(baseSelected);
-			      boolean isIn = in.isSelected();
-			      try {
-			    	EnsembleThread enThread = new EnsembleThread(project, simpleSelected, ensembleSelected, alList, isIn, resultView,start,pb,listView,selectShow);
-				    Thread t = new Thread(enThread);
-				    t.start();
-			       } catch (Exception e) {
-				// TODO Auto-generated catch block
-			      	e.printStackTrace();
-			       }
-			  }
+				      }
 		  }
 		  if(str.equals("结束")){
 			  start.setText("开始");
-			  EnsembleThread.stop = true;
+			  Start.finish = true;
 		  }
 	 }
 	 
@@ -248,6 +330,7 @@ public class Main extends Application{
 				oFile.write("#=====clear====".getBytes());
 				oFile.flush();
 				oFile.close();
+				pro.load(new FileInputStream("setting/baseClassification.properties"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -255,29 +338,72 @@ public class Main extends Application{
 		}
 		
 		@FXML
-		public void initialize(){
+		public void initialize() throws MalformedURLException{
+	
+			pb.setOnMouseEntered(new EventHandler<Event>() {
+
+				@Override
+				public void handle(Event event) {
+					// TODO Auto-generated method stub
+					DecimalFormat    df   = new DecimalFormat("######0.00");
+					pb.setTooltip(new Tooltip(df.format(pb.getProgress()*100)+"%"));
+				}
+			});
+			Properties mpro = new Properties();
+			List mList = new ArrayList();
+			try {
+				mpro.load(new FileInputStream("setting/method.properties"));
+				Iterator enumMethod = mpro.keySet().iterator();
+				while(enumMethod.hasNext()){
+					mList.add(enumMethod.next());
+				}
+				if(mList.size() > 1){
+					mList.add("All");
+				}
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			simple.getItems().addAll(mList);
 			ObservableList<String> names = FXCollections.observableArrayList();
 			ObservableList<String> yint = FXCollections.observableArrayList();
 			names.addAll(new String[]{"TP","FP","Precision","Recall","FMeasure","Gmeans","Acc","AUC"});
 			
 			xlabel.setCategories(names);
 			ylabel.setUpperBound(1);
-			selectShow.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//			selectShow.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 			selectShow.setOnMouseClicked(new EventHandler<Event>() {
 				
 				@Override
 				public void handle(Event event) {
 					// TODO Auto-generated method stub
-					 ObservableList<Log> selectedItems =  selectShow.getSelectionModel().getSelectedItems();
-					 chart.getData().removeAll(chart.getData());
-					 for(int i = 0 ; i < selectedItems.size() ; i++){
-						 XYChart.Series<String, Double> series = new XYChart.Series<>();
-						 for(int j = 0 ; j < names.size() ; j++){
-							 series.getData().add(new XYChart.Data<>(names.get(j),selectedItems.get(i).get(j)));
-						 }
-						 series.setName(selectedItems.get(i).getLog());
-						 chart.getData().add(series);
+					
+					 Log selectedItems =  (Log) selectShow.getSelectionModel().getSelectedItem();
+					 if(selectedItems == null){
+						 return;
 					 }
+					 try {
+						SelectShowMethod  ssm = new SelectShowMethod(stage,selectedItems,xlabel,chart,textShow,tp);
+						ssm.show();
+						
+					} catch (MalformedURLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					 chart.getData().removeAll(chart.getData());
+//					 for(int i = 0 ; i < selectedItems.size() ; i++){
+//						 XYChart.Series<String, Double> series = new XYChart.Series<>();
+//						 for(int j = 0 ; j < names.size() ; j++){
+//							 series.getData().add(new XYChart.Data<>(names.get(j),selectedItems.get(i).get(j)));
+//						 }
+//						 series.setName(selectedItems.get(i).getLog());
+//						 chart.getData().add(series);
+//						 chart.setCategoryGap(20);
+//						
+//					 }
 				}
 			});
 			

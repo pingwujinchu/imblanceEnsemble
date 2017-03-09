@@ -18,9 +18,9 @@
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+				<TabPane fx:id="tp" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
 					<tabs>
-						<Tab text="%key.file">
+						<Tab text="%key.file" >
 							<content>
 								<GridPane alignment="CENTER" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" scaleShape="false">
 									<children>
@@ -40,52 +40,31 @@
 										<GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
 											<columnConstraints>
 												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="113.0" />
+												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="80.0" minWidth="10.0" prefWidth="59.0" />
+												<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="113.0" />
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="74.0" minWidth="10.0" prefWidth="59.0" />
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="86.0" minWidth="10.0" prefWidth="68.0" />
 											</columnConstraints>
 											<rowConstraints>
 												<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 											</rowConstraints>
 											<children>
 												<Label text="%key.simple" />
-												<ChoiceBox fx:id="simple" prefWidth="150.0" snapToPixel="false" value="SMOTE" GridPane.columnIndex="1">
+												<ChoiceBox fx:id="simple" prefWidth="150.0" snapToPixel="false" GridPane.columnIndex="1">
 													<items>
-														<FXCollections fx:factory="observableArrayList">
-															<String fx:value="SMOTE" />
-															<String fx:value="OverSample" />
-															<String fx:value="UnderSample" />
-															<String fx:value="NoneSample" />
-														</FXCollections>
 													</items>
 													<GridPane.margin>
 														<Insets />
 													</GridPane.margin>
 												</ChoiceBox>
-												<ChoiceBox fx:id="ensemble" prefWidth="150.0" value="Boosting" GridPane.columnIndex="5">
-													<items>
-														<FXCollections fx:factory="observableArrayList">
-															<String fx:value="Bagging" />
-															<String fx:value="Boosting" />
-														</FXCollections>
-													</items>
-												</ChoiceBox>
-												<Label text="%key.ensemble" GridPane.columnIndex="4" />
-												<ChoiceBox fx:id="base" prefWidth="150.0" GridPane.columnIndex="7">
+												<ChoiceBox fx:id="base" prefWidth="150.0" GridPane.columnIndex="3">
 													<items>
 													</items>
 												</ChoiceBox>
-												<Label text="%key.base" GridPane.columnIndex="6" />
-                                    <Label text="%key.in" GridPane.columnIndex="2" />
-                                    <CheckBox fx:id="in" mnemonicParsing="false" GridPane.columnIndex="3" />
-                                    <Button fx:id="add" mnemonicParsing="false" onAction="#addAlgAction" text="%key.add" GridPane.columnIndex="9" />
-                                    <Button fx:id="clear" mnemonicParsing="false" onAction="#clearAction" text="%key.clear" GridPane.columnIndex="8" />
+												<Label text="%key.base" GridPane.columnIndex="2" />
+                                    <Button fx:id="add" mnemonicParsing="false" onAction="#addAlgAction" text="%key.add" GridPane.columnIndex="5" />
+                                    <Button fx:id="clear" mnemonicParsing="false" onAction="#clearAction" text="%key.clear" GridPane.columnIndex="4" />
 											</children>
 										</GridPane>
 										<Button fx:id="start" mnemonicParsing="false" onAction="#startAction" prefHeight="23.0" prefWidth="84.0" text="%key.start" GridPane.rowIndex="2" />
@@ -137,6 +116,7 @@
                                   <NumberAxis fx:id="ylabel" side="LEFT" />
                                 </yAxis>
                               </BarChart>
+                              <ListView fx:id="textShow" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" />
                            </children>
                         </GridPane>
                      </content>

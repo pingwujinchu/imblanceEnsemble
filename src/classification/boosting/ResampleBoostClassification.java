@@ -35,7 +35,7 @@ public class ResampleBoostClassification extends BasicClassification{
 		}
 		List result = new ArrayList();
 		result.add(getResult("overboost", classifier_name, validationResult1, times,ei));
-		result.add(getResult(",underboost", classifier_name, validationResult2, times,new EvaluationInfo(2)));
+		result.add(getResult(",underboost", classifier_name, validationResult2, times,new EvaluationInfo(numClass)));
 		return result;
 	}
 }

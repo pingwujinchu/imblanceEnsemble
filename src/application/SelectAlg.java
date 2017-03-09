@@ -68,6 +68,11 @@ public class SelectAlg extends Stage {
 		}
 
 		
+		/**
+		 * 选择类库
+		 * @param event
+		 * @throws IOException
+		 */
 		@FXML
 		public void selectJar(ActionEvent event) throws IOException {
 			 FileChooser fc = new FileChooser();
@@ -116,6 +121,10 @@ public class SelectAlg extends Stage {
 			}
 		}
 		
+		/**
+		 * 点击确认按钮
+		 * @param event
+		 */
 		@FXML
 		public void okAction(ActionEvent event){
 			List<String> l = selectClass.getItems();
@@ -177,6 +186,7 @@ public class SelectAlg extends Stage {
 					choiceBox.getItems().remove("All");
 					choiceBox.getItems().add("All");
 				}
+				oFile.flush();
 				oFile.close();
 			  }else{
 				String str = (String) selectClass.getValue();
@@ -193,6 +203,7 @@ public class SelectAlg extends Stage {
 					choiceBox.getItems().remove("All");
 					choiceBox.getItems().add("All");
 				}
+				oFile.flush();
 				oFile.close();
 			  }
 			} catch (IOException e) {

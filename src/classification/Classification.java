@@ -3,6 +3,7 @@ package classification;
 import java.util.List;
 
 import Classifier.SmoteBagging;
+import application.Method;
 import bean.DataSet;
 import bean.EvaluationInfo;
 import classification.bagging.BaggingClassification;
@@ -93,63 +94,129 @@ public class Classification {
 //	}
 	
 	
-	public List<EvaluationInfo> predict(String simple,boolean isIn,String ensemble,String base, int times,EvaluationInfo ei)  throws Exception{
+	public List<EvaluationInfo> predict(Method method,String base, int times,EvaluationInfo ei)  throws Exception{
 		String predict_result = "";
 		BasicClassification use_classification = new SimpleClassification(data);
 		classifier = (Classifier) Class.forName(base).newInstance();
-		if(!isIn){
-			if(ensemble.equals("Bagging")){
-				if(simple.equals("SMOTE")){
+//		if(!isIn){
+//			if(ensemble.equals("Bagging")){
+//				if(simple.equals("SMOTE")){
+//					
+//				}else if(simple.equals("OverSample")){
+//					
+//				}else if(simple.equals("UnderSample")){
+//					
+//				}else if(simple.equals("NoneSample")){
+//					use_classification = new BaggingClassification(data);
+//				}
+//			}else if(ensemble.equals("Bosting")){
+//				if(simple.equals("SMOTE")){
+//					
+//				}else if(simple.equals("OverSample")){
+//					use_classification = new ResampleBoostClassification(data);
+//				}else if(simple.equals("UnderSample")){
+//					
+//				}else if(simple.equals("NoneSample")){
+//					use_classification = new BoostingClassification(data);
+//				}
+//			}else{
+//				if(simple.equals("SMOTE")){
+//					
+//				}else if(simple.equals("OverSample")){
+//					use_classification = new ResampleSimpleClassification(data);
+//				}else if(simple.equals("UnderSample")){
+//					
+//				}else if(simple.equals("NoneSample")){
+//				}
+//			}
+//		}else{
+//			if(ensemble.equals("Bagging")){
+//				if(simple.equals("SMOTE")){
+//					
+//				}else if(simple.equals("OverSample")){
+//					use_classification = new ResampleInBaggingClassification(data);
+//				}else if(simple.equals("UnderSample")){
+//					
+//				}else if(simple.equals("NoneSample")){
+//					
+//				}
+//			}else{
+//				if(simple.equals("SMOTE")){
+//					
+//				}else if(simple.equals("OverSample")){
+//					use_classification = new ResampleInBoostingClassification(data);
+//				}else if(simple.equals("UnderSample")){
+//					
+//				}else if(simple.equals("NoneSample")){
+//					
+//				}
+//			}
+//		}
+		
+		//根据不同的方法执行不同的操作
+		  ///=========================================================================
+		  //1:Bagging embedded SMOTE;2:Bagging over SMOTE;3:Boosting embedded SMOTE;4:Boosting over SMOTE
+		  //5:Bagging embedded OverSample;6:Bagging over OverSample;7:Boosting embedded OverSample;8:Boosting over OverSample
+		  //9:Bagging embedded UnderSample;10:Bagging over UnderSample;11:Boosting embedded UnderSample;12:Boosting over UnderSample
+		  //13:Bagging;14:Boosting
+		  //============================================================================
+		switch(method.getIndex()){
+		        //Bagging embedded SMOTE
+				case 1:
 					
-				}else if(simple.equals("OverSample")){
+					break;
+				//Bagging over SMOTE
+				case 2:
 					
-				}else if(simple.equals("UnderSample")){
+					break;
+				//Boosting embedded SMOTE
+				case 3:
 					
-				}else if(simple.equals("NoneSample")){
-					use_classification = new BaggingClassification(data);
-				}
-			}else if(ensemble.equals("Bosting")){
-				if(simple.equals("SMOTE")){
+					break;
+				//Boosting over SMOTE
+				case 4:
 					
-				}else if(simple.equals("OverSample")){
-					use_classification = new ResampleBoostClassification(data);
-				}else if(simple.equals("UnderSample")){
+					break;
+				//Bagging embedded OverSample
+				case 5:
 					
-				}else if(simple.equals("NoneSample")){
-					use_classification = new BoostingClassification(data);
-				}
-			}else{
-				if(simple.equals("SMOTE")){
+					break;
+				//Bagging over OverSample
+				case 6:
 					
-				}else if(simple.equals("OverSample")){
-					use_classification = new ResampleSimpleClassification(data);
-				}else if(simple.equals("UnderSample")){
+					break;
+				//Boosting embedded OverSample
+				case 7:
 					
-				}else if(simple.equals("NoneSample")){
-				}
-			}
-		}else{
-			if(ensemble.equals("Bagging")){
-				if(simple.equals("SMOTE")){
+					break;
+				//Boosting over OverSample
+				case 8:
 					
-				}else if(simple.equals("OverSample")){
-					use_classification = new ResampleInBaggingClassification(data);
-				}else if(simple.equals("UnderSample")){
+					break;
+				//Bagging embedded UnderSample
+				case 9:
 					
-				}else if(simple.equals("NoneSample")){
+					break;
+				//Bagging over UnderSample
+				case 10:
 					
-				}
-			}else{
-				if(simple.equals("SMOTE")){
+					break;
+				//Boosting embedded UnderSample
+				case 11:
 					
-				}else if(simple.equals("OverSample")){
-					use_classification = new ResampleInBoostingClassification(data);
-				}else if(simple.equals("UnderSample")){
+					break;
+				//Boosting over UnderSample
+				case 12:
 					
-				}else if(simple.equals("NoneSample")){
+					break;
+				//Bagging
+				case 13:
 					
-				}
-			}
+					break;
+				//Boosting
+				case 14:
+					
+					break;
 		}
 		return use_classification.classify(times, classifier, base,ei);
 
