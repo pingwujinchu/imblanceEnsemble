@@ -77,7 +77,7 @@ public class EnsembleThread implements Runnable {
 		// TODO Auto-generated method stub
 
 		try {
-			result = Start.runClassification(project, methodList, baseSelected,pb);
+			result = Start.runClassification(project, methodList, baseSelected,pb,resultView);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			Platform.runLater(new Runnable() {

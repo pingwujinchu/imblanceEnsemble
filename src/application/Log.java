@@ -42,6 +42,10 @@ public class Log implements Observable{
 	public void setInfo(String info) {
 		Info = info;
 	}
+	
+	public String getMethodString(){
+		return method.getEnsamble()+" "+method.getIn()+" "+method.getSample();
+	}
 	@Override
 	public void addListener(InvalidationListener listener) {
 		// TODO Auto-generated method stub
@@ -114,6 +118,15 @@ public class Log implements Observable{
 		strBuilder.append("属性个数：		"+log.getDataset().getAttributesNum()+"\n");
 //		strBuilder.append("使用方法：		"+method.getEnsamble()+" "+method.getIn()+" "+method.getSample()+"\n");
 //		strBuilder.append("基分类器:			"+method.getBase());
+		
+		return strBuilder.toString();
+	}
+	
+	public String getLogShow(){
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append(getResultInfo(this));
+		strBuilder.append(getResMethod(this));
+		strBuilder.append(getResBase(this));
 		
 		return strBuilder.toString();
 	}

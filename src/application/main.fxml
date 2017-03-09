@@ -18,9 +18,9 @@
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<TabPane fx:id="tp" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+				<TabPane fx:id="tp" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0">
 					<tabs>
-						<Tab text="%key.file" >
+						<Tab closable="false" text="%key.file">
 							<content>
 								<GridPane alignment="CENTER" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" scaleShape="false">
 									<children>
@@ -83,7 +83,7 @@
 								</GridPane>
 							</content>
 						</Tab>
-						<Tab text="%key.result">
+						<Tab closable="false" text="%key.result">
                      <content>
                         <GridPane gridLinesVisible="true" snapToPixel="false">
                           <columnConstraints>

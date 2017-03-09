@@ -19,6 +19,7 @@ import dataprocess.CmdLineParser;
 import dataprocess.Util;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import weka.core.AttributeStats;
 import weka.core.Instances;
 
@@ -83,7 +84,7 @@ public class Start {
 	}
 
 	// 重写方法,该方法可以使用多种方法在多种基分类器上
-	public static List runClassification(List<String> project,List<Method> methodList,List<String> base,ProgressBar pb) throws IOException{
+	public static List runClassification(List<String> project,List<Method> methodList,List<String> base,ProgressBar pb,TextArea resultView) throws IOException{
 		List lll = new ArrayList();
 		int totle = 0;
 		outer : for(int k = 0 ; k < project.size() ; k++){
@@ -140,6 +141,7 @@ public class Start {
 							public void run() {
 								// TODO Auto-generated method stub
 								pb.setProgress((double)curr/((project.size())*(methodList.size())*(base.size())));
+								resultView.appendText(log.getLogShow());
 							}
 						});
 

@@ -25,6 +25,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -173,11 +174,41 @@ public class SelectShowMethod extends Stage {
 				}
 				//基分类器选所有
 				if((projectName.equals("All"))&&(!methodName.equals("All"))&& (baseName.equals("All"))){
-					analyseBaseOnDataSet();
+					List newList = new ArrayList();
+					for(int i = 0 ; i < log.logList.size() ; i++){
+						List ml = (List)log.logList.get(i);
+						List mlList = null;
+						for(int j = 0 ; j < ml.size() ; j++){
+							Method l = ((Log)((List)ml.get(i)).get(0)).getMethod();
+							if(methodName.equals(l.getEnsamble()+" "+l.getIn()+" "+l.getBase())){
+								mlList = ml;
+							}
+						}
+						newList.add(mlList);
+					}
+					analyseBaseOnDataSet(newList);
 				}
-				//分析所有情况
+				//集成方法对比
 				if((projectName.equals("All"))&&(methodName.equals("All"))&&(!baseName.equals("All"))){
-					analyseMethodOnDataSet();
+					List ml = new ArrayList();
+					for(int i = 0 ; i < log.logList.size();i++){
+						List pl = (List)log.logList.get(i);
+						List npl = new ArrayList();
+						for(int j = 0 ; j < pl.size() ; j++){
+							List bl = (List) pl.get(j);
+							for(int k = 0 ; k < bl.size() ; k++){
+								if(((Log)bl.get(k)).getMethod().getBase().equals(baseName)){
+									npl.add((Log)bl.get(k));
+								}
+							}
+						}
+						ml.add(npl);
+					}
+					analyseMethodOnDataSet(ml);
+				}
+				
+				if((projectName.equals("All"))&&(methodName.equals("All"))&&(!baseName.equals("All"))){
+					analyseAllOnDataSet(log.logList);
 				}
 			}
 		}
@@ -326,17 +357,82 @@ public class SelectShowMethod extends Stage {
 			 stage.close();
 		}
 		
-		public void analyseBaseOnDataSet(){
+		public void analyseBaseOnDataSet(List mlList){
 			Tab tb = new Tab("基分类方法对比");
 			tp.getTabs().add(tb);
 			tb.setClosable(true);
-			
+			tb.setStyle("-fx-select:true");
+			TextArea tx = new TextArea();
+			tb.setContent(tx);
+			stage.close();
 		}
 		
-		public void analyseMethodOnDataSet(){
+		public void analyseMethodOnDataSet(List ll){
 			Tab tb = new Tab("采样集成方法对比");
-			tp.getTabs().add(tb);
 			tb.setClosable(true);
+			TextArea tx = new TextArea();
+			tb.setContent(tx);
+			tp.getTabs().add(tb);
+			textShow.getItems().add("基分类方法: "+((Log)(((List)ll.get(0)).get(0))).getMethod().getBase());
+			tx.appendText("====================================\n");
+			tx.appendText("基分类方法: "+((Log)(((List)ll.get(0)).get(0))).getMethod().getBase()+"\n");
+			tx.appendText("====================================\n");
+			tx.appendText("\n\n");
+			
+			
+			ObservableList<String> names = FXCollections.observableArrayList();
+			names.addAll(new String[]{"TP","FP","Precision","Recall","FMeasure","Gmeans","Acc","AUC"});
+			
+			 xlabel.setCategories(names);
+			//获取所选组合方法的名称
+			List<String> methodNameList = new ArrayList();
+
+		    for(int j = 0 ; j < ((List)ll.get(0)).size() ; j++){
+				Log l = ((Log)((List)ll.get(0)).get(j));
+				methodNameList.add(l.getMethodString());	
+			}
+			
+			int [][] matrix = new int[ll.size()][((List)ll.get(0)).size()];
+			//首先统计所有方法在各个数据集上的均值
+			
+			Log temL = (Log)((List)ll.get(0)).get(0);
+			double [][] average1 = new double[8][((List)ll.get(0)).size()];
+			double [][] average2 = new double[8][((List)ll.get(0)).size()];
+			for(int j = 0 ; j < ((List)ll.get(0)).size() ; j++){//方法
+				for(int i = 0 ; i < ll.size() ; i++){//数据集
+					Log l = (Log)((List)ll.get(i)).get(j);
+					String m = l.getMethodString();
+					for(int k= 0 ; k < 8 ; k++ ){//指标
+				  	   average1[k][methodNameList.indexOf(m)] += l.get(k, 0)/ll.size();
+				  	   average2[k][methodNameList.indexOf(m)] += l.get(k, 1)/ll.size();
+					}
+				}
+			}
+			
+			DecimalFormat    df   = new DecimalFormat("######0.00");
+			for(int i = 0 ; i < ((List)ll.get(0)).size() ; i++){
+				Log l = (Log)((List)ll.get(0)).get(i);
+				textShow.getItems().add("-------------");
+				textShow.getItems().add("采样+集成方法");
+				textShow.getItems().add(l.getMethodString());
+				XYChart.Series<String, Double> series = new XYChart.Series<>();
+				for(int j = 0 ; j < names.size() ; j++){
+					  textShow.getItems().add("Class 0 Average "+names.get(j)+":"+df.format(average1[j][i]));
+					  textShow.getItems().add("Class 1 Average "+names.get(j)+":"+df.format(average2[j][i]));
+					  series.getData().add(new XYChart.Data<>(names.get(j),average1[j][i]));
+				}
+				series.setName(l.getMethodString());
+				chart.getData().add(series);
+			}
+			
+			
+			//在不同数据集上进行统计。
+			
+			stage.close();
+		}
+		
+		public void analyseAllOnDataSet(List allList){
+			
 		}
 		
 }
