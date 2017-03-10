@@ -40,6 +40,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import main.Start;
 import thread.EnsembleThread;
+import thread.SaveFileThread;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -411,6 +412,33 @@ public class Main extends Application{
 		
 		@FXML
 		public void outLog(ActionEvent event){
+			String result = resultView.getText();
+			FileChooser fc = new FileChooser();
+			fc.setInitialDirectory(new File("/"));
+			File f = fc.showSaveDialog(stage);
+			if(f != null){
+				SaveFileThread sft = new SaveFileThread(f, result);
+				Thread t = new Thread(sft);
+				t.start();
+			}
+		}
+		
+		@FXML
+		public void outLAction(ActionEvent event){
+			List<String> result = textShow.getItems();
+			StringBuilder strBuild = new StringBuilder();
 			
+			for(String str : result){
+				strBuild.append(str+"\n");
+			}
+			FileChooser fc = new FileChooser();
+			
+			fc.setInitialDirectory(new File("/"));
+			File f = fc.showSaveDialog(stage);
+			if(f != null){
+				SaveFileThread sft = new SaveFileThread(f, strBuild.toString());
+				Thread t = new Thread(sft);
+				t.start();
+			}
 		}
 }

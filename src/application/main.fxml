@@ -74,7 +74,7 @@
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="251.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="20.0" minHeight="0.0" prefHeight="21.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="26.0" minHeight="0.0" prefHeight="26.0" valignment="CENTER" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
                                     <TextArea fx:id="resultView" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" />
@@ -134,11 +134,11 @@
                                 </columnConstraints>
                                 <rowConstraints>
                                   <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="321.0" vgrow="SOMETIMES" />
-                                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <children>
                                     <ListView fx:id="textShow" prefHeight="200.0" prefWidth="200.0" />
-                                    <Button fx:id="outL" mnemonicParsing="false" text="%key.outL" GridPane.rowIndex="1" />
+                                    <Button fx:id="outL" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#outLAction" prefHeight="23.0" prefWidth="90.0" text="%key.outL" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
                            </children>
