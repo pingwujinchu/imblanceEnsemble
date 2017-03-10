@@ -210,7 +210,7 @@ public class SelectShowMethod extends Stage {
 					analyseMethodOnDataSet(ml);
 				}
 				
-				if((projectName.equals("All"))&&(methodName.equals("All"))&&(!baseName.equals("All"))){
+				if((projectName.equals("All"))&&(!methodName.equals("All"))&&(baseName.equals("All"))){
 					analyseAllOnDataSet(log.logList);
 				}
 			}
