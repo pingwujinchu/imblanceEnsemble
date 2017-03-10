@@ -136,7 +136,6 @@ public class Start {
 				totle ++;
 				final int curr = totle;
 	    		Platform.runLater(new Runnable() {
-
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
@@ -165,5 +164,4 @@ public class Start {
 		}
 		return lll;
 	}
-
 }

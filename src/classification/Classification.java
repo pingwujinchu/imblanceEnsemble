@@ -7,8 +7,17 @@ import application.Method;
 import bean.DataSet;
 import bean.EvaluationInfo;
 import classification.bagging.BaggingClassification;
+import classification.bagging.BaggingEmbeddedOverSimple;
+import classification.bagging.BaggingEmbeddedSMOT;
+import classification.bagging.BaggingEmbeddedUnderSample;
+import classification.bagging.BaggingOverOverSample;
+import classification.bagging.BaggingOverUnderSimple;
 import classification.bagging.ResampleInBaggingClassification;
 import classification.boosting.BoostingClassification;
+import classification.boosting.BoostingEmbeddedOverSimple;
+import classification.boosting.BoostingEmbeddedUnderSimple;
+import classification.boosting.BoostingOverOverSimple;
+import classification.boosting.BoostingOverUnderSimple;
 import classification.boosting.ResampleBoostClassification;
 import classification.boosting.ResampleInBoostingClassification;
 import dataprocess.Util;
@@ -163,7 +172,7 @@ public class Classification {
 		switch(method.getIndex()){
 		        //Bagging embedded SMOTE
 				case 1:
-					
+					use_classification = new BaggingEmbeddedSMOT(data);
 					break;
 				//Bagging over SMOTE
 				case 2:
@@ -179,47 +188,58 @@ public class Classification {
 					break;
 				//Bagging embedded OverSample
 				case 5:
-					
+					use_classification = new BaggingEmbeddedOverSimple(data);
 					break;
 				//Bagging over OverSample
 				case 6:
-					
+					use_classification = new BaggingOverOverSample(data);
 					break;
 				//Boosting embedded OverSample
 				case 7:
-					
+					use_classification = new BoostingEmbeddedOverSimple(data);
 					break;
 				//Boosting over OverSample
 				case 8:
-					
+					use_classification = new BoostingOverOverSimple(data);
 					break;
 				//Bagging embedded UnderSample
 				case 9:
-					
+					use_classification = new BaggingEmbeddedUnderSample(data);
 					break;
 				//Bagging over UnderSample
 				case 10:
-					
+					use_classification = new BaggingOverUnderSimple(data);
 					break;
 				//Boosting embedded UnderSample
 				case 11:
-					
+					use_classification = new BoostingEmbeddedUnderSimple(data);
 					break;
 				//Boosting over UnderSample
 				case 12:
-					
+					use_classification = new BoostingOverUnderSimple(data);
 					break;
 				//Bagging
 				case 13:
-					
+					use_classification = new BaggingClassification(data);
 					break;
 				//Boosting
 				case 14:
-//					use_classification = new Boosting();
+					use_classification = new BoostingClassification(data);
+					break;
+				//under sample
+				case 15:
+					use_classification = new UnderSampleClassification(data);
+					break;
+				//over sample
+				case 16:
+					use_classification = new OverSampleClassification(data);
+					break;
+				//none sample
+				case 17:
+					use_classification = new SimpleClassification(data);
 					break;
 		}
 		return use_classification.classify(times, classifier, base,ei);
-
 	  }
 	
 }

@@ -57,7 +57,6 @@ public class ResampleInBoostingClassification extends BasicClassification{
 		return result;
 	}
 
-
 	private List<EvaluationInfo> getOverBoostClassificationResult(Classifier classifier, String classifier_name, int times,EvaluationInfo ei) throws Exception {
 		double validationResult[] = new double[5*numClass + 3];
 		OverBoosting boost_classifier = new OverBoosting(); //set the classifier as bagging

@@ -71,7 +71,7 @@ public class ResampleInBaggingClassification extends BasicClassification{
 		return result;
 	}
 
-
+	//¸ÉÉ¶µÄ£¿£¿£¿
 	private List<EvaluationInfo> getUnderOverBagClassificationResult(Classifier classifier, String classifier_name, int times,EvaluationInfo ei) throws Exception {
 		double validationResult[] = new double[5*numClass + 3];
 		UnderOverBagging bag_classifier = new UnderOverBagging(); //set the classifier as bagging

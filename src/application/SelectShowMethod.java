@@ -13,6 +13,7 @@ import bean.EvaluationInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -28,8 +30,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import thread.SaveFileThread;
 
 public class SelectShowMethod extends Stage {
 		@FXML ChoiceBox project;
@@ -376,7 +382,30 @@ public class SelectShowMethod extends Stage {
 			Tab tb = new Tab("采样集成方法对比");
 			tb.setClosable(true);
 			TextArea tx = new TextArea();
-			tb.setContent(tx);
+			
+			BorderPane bp = new BorderPane();
+			bp.setCenter(tx);
+			Button outputLog = new Button("导出日志");
+			bp.setBottom(outputLog);
+			
+			tb.setContent(bp);
+			
+			outputLog.setOnAction(new EventHandler<ActionEvent>() {
+				
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO Auto-generated method stub
+					String result = tx.getText();
+					FileChooser fc = new FileChooser();
+					fc.setInitialDirectory(new File("/"));
+					File f = fc.showSaveDialog(stage);
+					if(f != null){
+						SaveFileThread sft = new SaveFileThread(f, result);
+						Thread t = new Thread(sft);
+						t.start();
+					}
+				}
+			});
 			tp.getTabs().add(tb);
 			textShow.getItems().add("基分类方法: "+((Log)(((List)ll.get(0)).get(0))).getMethod().getBase());
 			tx.appendText("====================================\n");
@@ -508,6 +537,15 @@ public class SelectShowMethod extends Stage {
 				}
 				tx.appendText("\n");
 			}
+			
+			tx.appendText("\n\n");
+			List<String> result = textShow.getItems();
+			StringBuilder strBuild = new StringBuilder();
+			
+			for(String str : result){
+				strBuild.append(str+"\n");
+			}
+			tx.appendText(strBuild.toString());
 			stage.close();
 		}
 		

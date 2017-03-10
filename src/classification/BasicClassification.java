@@ -49,7 +49,7 @@ public class BasicClassification {
 			eval = new UndersampleEvaluation(data);
 			eval.crossValidateModel(classifier, data, 10, rand);
 		}
-		if(sample.equals("over")){
+		else if(sample.equals("over")){
 			eval = new OversampleEvaluation(data);
 			eval.crossValidateModel(classifier, data, 10, rand);
 		}
