@@ -144,13 +144,6 @@ public class Start {
 								resultView.appendText(log.getLogShow());
 							}
 						});
-
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 				
 				if(finish){
 					

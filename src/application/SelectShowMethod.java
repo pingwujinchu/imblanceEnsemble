@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import bean.EvaluationInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -154,7 +155,7 @@ public class SelectShowMethod extends Stage {
 					}
 					drawByProjectList(projectList);
 				}
-				//使用采样+集成方法选所有
+				//使用采样+集成方法选所有ALL+""+""
 				if((!projectName.equals("All"))&&(methodName.equals("All"))&& (!baseName.equals("All"))){
 					List methodList = new ArrayList();
 					for(int i = 0 ; i < log.logList.size() ; i++){
@@ -172,7 +173,7 @@ public class SelectShowMethod extends Stage {
 					}
 					drawByMethodList(methodList);
 				}
-				//基分类器选所有
+				//基分类器选所有""+""+All
 				if((projectName.equals("All"))&&(!methodName.equals("All"))&& (baseName.equals("All"))){
 					List newList = new ArrayList();
 					for(int i = 0 ; i < log.logList.size() ; i++){
@@ -188,9 +189,11 @@ public class SelectShowMethod extends Stage {
 					}
 					analyseBaseOnDataSet(newList);
 				}
-				//集成方法对比
+				//集成方法对比All+All+""
+				//该方法用于统计某个基分类器在所有方法，所有数据集上的信息
 				if((projectName.equals("All"))&&(methodName.equals("All"))&&(!baseName.equals("All"))){
-					List ml = new ArrayList();
+					List ml = new ArrayList();//ml第一维是数据集，每个数据集后面是一个列表，列表的每一维是一个
+					// log.logList保存的是所有程序在所有方法上在所有基分类器上的运行结果，第一维是数据集，第二维是方法，第三维是基分类器
 					for(int i = 0 ; i < log.logList.size();i++){
 						List pl = (List)log.logList.get(i);
 						List npl = new ArrayList();
@@ -202,7 +205,7 @@ public class SelectShowMethod extends Stage {
 								}
 							}
 						}
-						ml.add(npl);
+						ml.add(npl);//ml是不同数据集+不同方法的二维列表
 					}
 					analyseMethodOnDataSet(ml);
 				}
@@ -357,6 +360,7 @@ public class SelectShowMethod extends Stage {
 			 stage.close();
 		}
 		
+		//All+""+All
 		public void analyseBaseOnDataSet(List mlList){
 			Tab tb = new Tab("基分类方法对比");
 			tp.getTabs().add(tb);
@@ -367,6 +371,7 @@ public class SelectShowMethod extends Stage {
 			stage.close();
 		}
 		
+		//All+All+""
 		public void analyseMethodOnDataSet(List ll){
 			Tab tb = new Tab("采样集成方法对比");
 			tb.setClosable(true);
@@ -378,11 +383,12 @@ public class SelectShowMethod extends Stage {
 			tx.appendText("基分类方法: "+((Log)(((List)ll.get(0)).get(0))).getMethod().getBase()+"\n");
 			tx.appendText("====================================\n");
 			tx.appendText("\n\n");
+			tx.setEditable(false);
 			
 			
 			ObservableList<String> names = FXCollections.observableArrayList();
 			names.addAll(new String[]{"TP","FP","Precision","Recall","FMeasure","Gmeans","Acc","AUC"});
-			
+			 DecimalFormat    df   = new DecimalFormat("######0.00");
 			 xlabel.setCategories(names);
 			//获取所选组合方法的名称
 			List<String> methodNameList = new ArrayList();
@@ -392,10 +398,10 @@ public class SelectShowMethod extends Stage {
 				methodNameList.add(l.getMethodString());	
 			}
 			
-			int [][] matrix = new int[ll.size()][((List)ll.get(0)).size()];
+		    Log temL = (Log)((List)ll.get(0)).get(0);
+			int [][][] matrix = new int[ll.size()][((List)ll.get(0)).size()][8*((EvaluationInfo)temL.getEi().get(0)).classNum];
 			//首先统计所有方法在各个数据集上的均值
 			
-			Log temL = (Log)((List)ll.get(0)).get(0);
 			double [][] average1 = new double[8][((List)ll.get(0)).size()];
 			double [][] average2 = new double[8][((List)ll.get(0)).size()];
 			for(int j = 0 ; j < ((List)ll.get(0)).size() ; j++){//方法
@@ -409,13 +415,12 @@ public class SelectShowMethod extends Stage {
 				}
 			}
 			
-			DecimalFormat    df   = new DecimalFormat("######0.00");
 			for(int i = 0 ; i < ((List)ll.get(0)).size() ; i++){
 				Log l = (Log)((List)ll.get(0)).get(i);
 				textShow.getItems().add("-------------");
 				textShow.getItems().add("采样+集成方法");
 				textShow.getItems().add(l.getMethodString());
-				XYChart.Series<String, Double> series = new XYChart.Series<>();
+				XYChart.Series<String, Double> series = new XYChart.Series<>();//每个采样+集成学习方法就是一个系列
 				for(int j = 0 ; j < names.size() ; j++){
 					  textShow.getItems().add("Class 0 Average "+names.get(j)+":"+df.format(average1[j][i]));
 					  textShow.getItems().add("Class 1 Average "+names.get(j)+":"+df.format(average2[j][i]));
@@ -425,9 +430,84 @@ public class SelectShowMethod extends Stage {
 				chart.getData().add(series);
 			}
 			
-			
+			int [][]finRes = new int[methodNameList.size()][8*((EvaluationInfo)temL.getEi().get(0)).classNum ];
 			//在不同数据集上进行统计。
+			for(int i = 0 ; i < ll.size() ; i++){//数据集
+				double [] currRes = new double[8*((EvaluationInfo)temL.getEi().get(0)).classNum];
+				for(int j = 0 ; j < ((List)ll.get(0)).size() ; j++){//采样+集成学习
+					Log l = (Log) ((List)ll.get(0)).get(j);
+					
+					for(int ind = 0 ; ind < 8 ; ind ++){
+					     for(int k = 0 ; k < ((EvaluationInfo)temL.getEi().get(0)).classNum  ; k++){
+						   if(currRes [ind*((EvaluationInfo)temL.getEi().get(0)).classNum+k] < l.get(ind,k)){ 
+							   currRes [ind*((EvaluationInfo)temL.getEi().get(0)).classNum+k] = l.get(ind,k);
+						   }
+						}
+					}
+				}
+				
+				//统计
+				for(int j = 0 ; j <((List)ll.get(0)).size() ; j++ ){
+					Log l = (Log) ((List)ll.get(0)).get(j);
+					for(int ind = 0 ; ind < 8 ; ind ++){
+					     for(int k = 0 ; k < ((EvaluationInfo)temL.getEi().get(0)).classNum  ; k++){
+					    	 if(currRes [ind*((EvaluationInfo)temL.getEi().get(0)).classNum+k] == l.get(ind,k)){
+					    		 matrix[i][j][ind*((EvaluationInfo)temL.getEi().get(0)).classNum+k] += 1;
+					    	 }
+					     }
+					}
+				}
+				
+			}
+			for(int j = 0 ; j < ((List)ll.get(0)).size() ; j ++){  //方法
+				for(int i = 0 ; i < ll.size() ; i++){    //数据集
+					for(int ind = 0 ; ind < 8 ; ind ++){   
+					     for(int k = 0 ; k < ((EvaluationInfo)temL.getEi().get(0)).classNum  ; k++){
+					         finRes[j][ind*((EvaluationInfo)temL.getEi().get(0)).classNum+k] += matrix[i][j][ind*((EvaluationInfo)temL.getEi().get(0)).classNum+k];
+					     }
+					}
+				}
+			}
 			
+			    tx.appendText("								");
+			    for(int j = 0 ; j < 8 ; j ++){
+					    for(int i = 0 ; i < ((EvaluationInfo)temL.getEi().get(0)).classNum  ; i ++){
+					    	switch(j){
+					    	case 0:
+					    		tx.appendText("TP-C"+i+"		");
+					    		break;
+					    	case 1:
+					    		tx.appendText("FP-C"+i+"		");
+					    		break;
+					    	case 2:
+					    		tx.appendText("Precision-C"+i+"			");
+					    		break;
+					    	case 3:
+					    		tx.appendText("Recall-C"+i+"			");
+					    		break;
+					    	case 4:
+					    		tx.appendText("FMeasure-C"+i+"			");
+					    		break;
+					    	case 5:
+					    		tx.appendText("Gmean-C"+i+"			");
+					    		break;
+					    	case 6:
+					    		tx.appendText("Acc-C"+i+"			");
+					    		break;
+					    	case 7:
+					    		tx.appendText("AUC-C"+i+"			");
+					    		break;
+					    	}
+					    }
+			    }
+			tx.appendText("\n");
+			for(int j = 0 ; j < finRes.length ; j ++){
+				tx.appendText(methodNameList.get(j)+"			");
+				for(int k = 0 ; k < finRes[0].length ; k++){
+					tx.appendText(df.format(finRes[j][k])+"			");
+				}
+				tx.appendText("\n");
+			}
 			stage.close();
 		}
 		

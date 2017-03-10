@@ -345,7 +345,7 @@ public class Main extends Application{
 				@Override
 				public void handle(Event event) {
 					// TODO Auto-generated method stub
-					DecimalFormat    df   = new DecimalFormat("######0.00");
+					DecimalFormat    df   = new DecimalFormat("######0.0000");
 					pb.setTooltip(new Tooltip(df.format(pb.getProgress()*100)+"%"));
 				}
 			});
@@ -406,6 +406,11 @@ public class Main extends Application{
 //					 }
 				}
 			});
+			
+		}
+		
+		@FXML
+		public void outLog(ActionEvent event){
 			
 		}
 }

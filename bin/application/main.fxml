@@ -24,7 +24,6 @@
 							<content>
 								<GridPane alignment="CENTER" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" pickOnBounds="false" scaleShape="false">
 									<children>
-										<TextArea fx:id="resultView" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
 										<Button fx:id="opfile" mnemonicParsing="false" onAction="#chooseFileAction" prefHeight="23.0" prefWidth="87.0" text="%key.openfile" GridPane.rowIndex="1" />
 										<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1">
 											<columnConstraints>
@@ -69,6 +68,19 @@
 										</GridPane>
 										<Button fx:id="start" mnemonicParsing="false" onAction="#startAction" prefHeight="23.0" prefWidth="84.0" text="%key.start" GridPane.rowIndex="2" />
 										<ListView fx:id="listView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3" />
+                              <GridPane maxWidth="1.7976931348623157E308" prefHeight="20.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                <columnConstraints>
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="251.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="20.0" minHeight="0.0" prefHeight="21.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <TextArea fx:id="resultView" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" />
+                                    <Button fx:id="outLog" mnemonicParsing="false" onAction="#outLog" text="%key.outLog" GridPane.rowIndex="1" />
+                                 </children>
+                              </GridPane>
 									</children>
 									<columnConstraints>
 										<ColumnConstraints halignment="CENTER" maxWidth="200.0" minWidth="10.0" prefWidth="125.0" />
@@ -78,7 +90,7 @@
 										<RowConstraints maxHeight="10.0" minHeight="4.0" prefHeight="9.0" valignment="CENTER" vgrow="SOMETIMES" />
 										<RowConstraints maxHeight="51.0" minHeight="7.0" prefHeight="26.0" valignment="CENTER" vgrow="SOMETIMES" />
 										<RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="49.0" vgrow="SOMETIMES" />
-										<RowConstraints maxHeight="1.7976931348623157E308" prefHeight="270.0" vgrow="SOMETIMES" />
+										<RowConstraints maxHeight="1.7976931348623157E308" minHeight="172.0" prefHeight="272.0" vgrow="SOMETIMES" />
 									</rowConstraints>
 								</GridPane>
 							</content>
@@ -116,7 +128,19 @@
                                   <NumberAxis fx:id="ylabel" side="LEFT" />
                                 </yAxis>
                               </BarChart>
-                              <ListView fx:id="textShow" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" />
+                              <GridPane GridPane.columnIndex="2">
+                                <columnConstraints>
+                                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="321.0" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <ListView fx:id="textShow" prefHeight="200.0" prefWidth="200.0" />
+                                    <Button fx:id="outL" mnemonicParsing="false" text="%key.outL" GridPane.rowIndex="1" />
+                                 </children>
+                              </GridPane>
                            </children>
                         </GridPane>
                      </content>

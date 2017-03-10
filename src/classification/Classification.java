@@ -215,7 +215,7 @@ public class Classification {
 					break;
 				//Boosting
 				case 14:
-					
+//					use_classification = new Boosting();
 					break;
 		}
 		return use_classification.classify(times, classifier, base,ei);
