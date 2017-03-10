@@ -188,15 +188,15 @@ public class Classification {
 					break;
 				//Bagging embedded OverSample
 				case 5:
-					use_classification = new BaggingEmbeddedOverSimple(data);
+//					use_classification = new BaggingEmbeddedOverSimple(data);
 					break;
 				//Bagging over OverSample
 				case 6:
-					use_classification = new BaggingOverOverSample(data);
+					//use_classification = new BaggingOverOverSample(data);
 					break;
 				//Boosting embedded OverSample
 				case 7:
-					use_classification = new BoostingEmbeddedOverSimple(data);
+					//use_classification = new BoostingEmbeddedOverSimple(data);
 					break;
 				//Boosting over OverSample
 				case 8:
@@ -241,5 +241,4 @@ public class Classification {
 		}
 		return use_classification.classify(times, classifier, base,ei);
 	  }
-	
 }

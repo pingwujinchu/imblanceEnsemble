@@ -1,0 +1,45 @@
+<html><head>
+  <SCRIPT src="./web-files/dtjava.js"></SCRIPT>
+<script>
+    function launchApplication(jnlpfile) {
+        dtjava.launch(            {
+                url : 'ImbalanceEnsamble.jnlp',
+                jnlp_content : 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxqbmxwIHNwZWM9IjEuMCIgeG1sbnM6amZ4PSJodHRwOi8vamF2YWZ4LmNvbSIgaHJlZj0iSW1iYWxhbmNlRW5zYW1ibGUuam5scCI+DQogIDxpbmZvcm1hdGlvbj4NCiAgICA8dGl0bGU+SW1iYWxhbmNlRW5zYW1ibGU8L3RpdGxlPg0KICAgIDx2ZW5kb3I+ZWRlbjwvdmVuZG9yPg0KICAgIDxkZXNjcmlwdGlvbj5pbUJhbGFuY2VMZWFybmluZzwvZGVzY3JpcHRpb24+DQogICAgPG9mZmxpbmUtYWxsb3dlZC8+DQogIDwvaW5mb3JtYXRpb24+DQogIDxyZXNvdXJjZXM+DQogICAgPGoyc2UgdmVyc2lvbj0iMS42KyIgaHJlZj0iaHR0cDovL2phdmEuc3VuLmNvbS9wcm9kdWN0cy9hdXRvZGwvajJzZSIvPg0KICAgIDxqYXIgaHJlZj0iSW1iYWxhbmNlRW5zYW1ibGUuamFyIiBzaXplPSI5OTA5OSIgZG93bmxvYWQ9ImVhZ2VyIiAvPg0KICAgIDxqYXIgaHJlZj0ibGlic1xqYXZhLWN1cC5qYXIiIHNpemU9Ijk1NzIxIiBkb3dubG9hZD0iZWFnZXIiIC8+DQogICAgPGphciBocmVmPSJsaWJzXHdla2EuamFyIiBzaXplPSI3MjE0NzQ0IiBkb3dubG9hZD0iZWFnZXIiIC8+DQogIDwvcmVzb3VyY2VzPg0KICA8amZ4OmphdmFmeC1kZXNjICB3aWR0aD0iMCIgaGVpZ2h0PSIwIiBtYWluLWNsYXNzPSJhcHBsaWNhdGlvbi5NYWluIiAgbmFtZT0iaW1CYWxhbmNlTGVhcm5pbmciIC8+DQogIDx1cGRhdGUgY2hlY2s9ImJhY2tncm91bmQiLz4NCjwvam5scD4NCg=='
+            },
+            {
+                javafx : '8.0+'
+            },
+            {}
+        );
+        return false;
+    }
+</script>
+
+<script>
+    function javafxEmbedfxApplication() {
+        dtjava.embed(
+            {
+                id : 'fxApplication',
+                url : 'ImbalanceEnsamble.jnlp',
+                placeholder : 'javafx-app-placeholder',
+                width : '0',
+                height : '0',
+                jnlp_content : 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjxqbmxwIHNwZWM9IjEuMCIgeG1sbnM6amZ4PSJodHRwOi8vamF2YWZ4LmNvbSIgaHJlZj0iSW1iYWxhbmNlRW5zYW1ibGUuam5scCI+DQogIDxpbmZvcm1hdGlvbj4NCiAgICA8dGl0bGU+SW1iYWxhbmNlRW5zYW1ibGU8L3RpdGxlPg0KICAgIDx2ZW5kb3I+ZWRlbjwvdmVuZG9yPg0KICAgIDxkZXNjcmlwdGlvbj5pbUJhbGFuY2VMZWFybmluZzwvZGVzY3JpcHRpb24+DQogICAgPG9mZmxpbmUtYWxsb3dlZC8+DQogIDwvaW5mb3JtYXRpb24+DQogIDxyZXNvdXJjZXM+DQogICAgPGoyc2UgdmVyc2lvbj0iMS42KyIgaHJlZj0iaHR0cDovL2phdmEuc3VuLmNvbS9wcm9kdWN0cy9hdXRvZGwvajJzZSIvPg0KICAgIDxqYXIgaHJlZj0iSW1iYWxhbmNlRW5zYW1ibGUuamFyIiBzaXplPSI5OTA5OSIgZG93bmxvYWQ9ImVhZ2VyIiAvPg0KICAgIDxqYXIgaHJlZj0ibGlic1xqYXZhLWN1cC5qYXIiIHNpemU9Ijk1NzIxIiBkb3dubG9hZD0iZWFnZXIiIC8+DQogICAgPGphciBocmVmPSJsaWJzXHdla2EuamFyIiBzaXplPSI3MjE0NzQ0IiBkb3dubG9hZD0iZWFnZXIiIC8+DQogIDwvcmVzb3VyY2VzPg0KICA8amZ4OmphdmFmeC1kZXNjICB3aWR0aD0iMCIgaGVpZ2h0PSIwIiBtYWluLWNsYXNzPSJhcHBsaWNhdGlvbi5NYWluIiAgbmFtZT0iaW1CYWxhbmNlTGVhcm5pbmciIC8+DQogIDx1cGRhdGUgY2hlY2s9ImJhY2tncm91bmQiLz4NCjwvam5scD4NCg=='
+            },
+            {
+                javafx : '8.0+'
+            },
+            {}
+        );
+    }
+    <!-- Embed FX application into web page once page is loaded -->
+    dtjava.addOnloadCallback(javafxEmbedfxApplication);
+</script>
+
+</head><body>
+<h2>Test page for <b>imBalanceLearning</b></h2>
+  <b>Webstart:</b> <a href='ImbalanceEnsamble.jnlp' onclick="return launchApplication('ImbalanceEnsamble.jnlp');">click to launch this app as webstart</a><br><hr><br>
+
+  <!-- Applet will be inserted here -->
+  <div id='javafx-app-placeholder'></div>
+</body></html>

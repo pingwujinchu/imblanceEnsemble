@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="ImbalanceEnsamble.jnlp">
+  <information>
+    <title>ImbalanceEnsamble</title>
+    <vendor>eden</vendor>
+    <description>imBalanceLearning</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="ImbalanceEnsamble.jar" size="99099" download="eager" />
+    <jar href="libs\java-cup.jar" size="95721" download="eager" />
+    <jar href="libs\weka.jar" size="7214744" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="0" height="0" main-class="application.Main"  name="imBalanceLearning" />
+  <update check="background"/>
+</jnlp>
