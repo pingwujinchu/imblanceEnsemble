@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -85,6 +87,8 @@ public class Main extends Application{
 	@FXML TabPane tp;
 
 	Stage stage = null;
+	public static Map classMap = new HashMap();
+	static Map methodMap = new HashMap();
 	static Stage dialog = null;
 	static volatile Properties pro;
 	@Override
@@ -126,7 +130,23 @@ public class Main extends Application{
 			});  
 			
 			primaryStage.show();
-			
+			methodMap.put("Bagging embedded SMOTE", 1);
+			methodMap.put("Bagging over SMOTE", 2);
+			methodMap.put("Boosting embedded SMOTE", 3);
+			methodMap.put("Boosting over SMOTE", 4);
+			methodMap.put("Bagging embedded OverSample", 5);
+			methodMap.put("Bagging over OverSample", 6);
+			methodMap.put("Boosting embedded OverSample", 7);
+			methodMap.put("Boosting over OverSample", 8);
+			methodMap.put("Bagging embedded UnderSample", 9);
+			methodMap.put("Bagging over UnderSample", 10);
+			methodMap.put("Boosting embedded UnderSample", 11);
+			methodMap.put("Boosting over UnderSample", 12);
+			methodMap.put("Bagging", 13);
+			methodMap.put("Boosting", 14);
+			methodMap.put("Over", 15);
+			methodMap.put("Under", 16);
+			methodMap.put("Simple", 17);
 //			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 //				
 //				@Override
@@ -277,6 +297,7 @@ public class Main extends Application{
 			  //13:Bagging;14:Boosting
 			  //============================================================================
 			  List<Method> methodList = new ArrayList();  //添加所有方法
+			  
 			  if(simple.getValue().equals("All")){
 				   logInfo += " & All";
 				   List allItem = simple.getItems();
@@ -288,22 +309,27 @@ public class Main extends Application{
 						  }
 						  if(value.contains("_")){
 							  String allStr [] = value.split("_");
-							  currMd = new Method(i + 1, allStr[2], allStr[1], allStr[0]);
+							  String currStr = allStr[0]+" "+allStr[1]+" "+allStr[2];
+							  System.out.println(methodMap.size());
+							  int currIndex = (Integer)methodMap.get(currStr);
+							  currMd = new Method(currIndex, allStr[2], allStr[1], allStr[0]);
 						  }else{
+							     int currIndex = (Integer)methodMap.get(value);
 							     currMd = new Method(i + 1, "", "", value);
 							  }
 						  methodList.add(currMd);
 				   }
 			  }else{
-				  int index =  simple.getItems().indexOf(simple.getItems().indexOf(simple.getValue()));
 				  String value = (String) simple.getValue();
 				  logInfo += " & "+value;
 				  Method currMd = null;
 				  if(value.contains("_")){
 					  String allStr [] = value.split("_");
-					  currMd = new Method(index + 1, allStr[2], allStr[1], allStr[0]);
+					  int index = (Integer)methodMap.get(allStr[0]+" "+allStr[1]+" "+allStr[2]);
+					  currMd = new Method(index , allStr[2], allStr[1], allStr[0]);
 				  }else{
-					  currMd = new Method(index + 1, "", "", value);
+					  int index = (Integer)methodMap.get(value);
+					  currMd = new Method(index , "", "", value);
 				  }
 				  methodList.add(currMd);
 			  }

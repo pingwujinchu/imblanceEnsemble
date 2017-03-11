@@ -138,6 +138,5 @@
 			<fx:resources refid="appRes"/>
 		</fx:deploy>
 		
-		
 	</target>
 </project>

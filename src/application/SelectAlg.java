@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -84,6 +85,7 @@ public class SelectAlg extends Stage {
 			 selectedFile = f;
 			 
 			 if(f != null && f.exists()){
+				 
 				 showSelectedFile.setText(f.getAbsolutePath());
 				 JarFile jarFile = new JarFile(f);
 				 List<String> classList = new ArrayList();
@@ -91,10 +93,20 @@ public class SelectAlg extends Stage {
 				 while(enums.hasMoreElements()){
 					 JarEntry je = (JarEntry) enums.nextElement();
 					 String name = je.getName();
-		
 						try {
-							if(name.endsWith(".class") && weka.classifiers.Classifier.class.isAssignableFrom(Class.forName(name.substring(0, name.length()-6).replaceAll("/", "\\.")))){
-								 classList.add(name.substring(0, name.length()-6));
+							if(name.endsWith(".class")){
+								 URL url1 = f.toURL();  
+					             URLClassLoader myClassLoader1 = new URLClassLoader(new URL[] { url1 }, Thread.currentThread()  
+					                        .getContextClassLoader());  
+					             Class<?> myClass1 = myClassLoader1.loadClass(name.substring(0, name.length()-6).replaceAll("/", "\\."));   
+						
+					             if(weka.classifiers.Classifier.class.isAssignableFrom(myClass1)){
+								     classList.add(name.substring(0, name.length()-6));
+								     File lf = new File("lib");
+								     if(!f.getAbsolutePath().startsWith(lf.getAbsolutePath())){
+								    	 Main.classMap.put(name.substring(0, name.length()-6), myClass1);
+								     }
+					             }
 							 }
 						} catch (ClassNotFoundException e) {
 							// TODO Auto-generated catch block
@@ -149,29 +161,20 @@ public class SelectAlg extends Stage {
 			     _alert.show();
 				 return;
 			}
-			File folder = new File("lib");
-			if(!selectedFile.getAbsolutePath().startsWith(folder.getAbsolutePath())){
-				   try {
-					FileInputStream fr = new FileInputStream(selectedFile);
-					FileOutputStream fw = new FileOutputStream(new File("lib/"+selectedFile.getName()));
-					byte[]buffer = new byte[1024];
-					int size= 0;
-					while((size = fr.read(buffer))>0){
-						fw.write(buffer, 0, size);
-					}
-					fr.close();
-					fw.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			
 			FileOutputStream oFile;
+			boolean isInPath = false;
+			if(showSelectedFile.getText().startsWith(new File("lib").getAbsolutePath())){
+				isInPath = true;
+			}
 			try {
 				oFile = new FileOutputStream(new File("setting/baseClassification.properties"),true);
 			if(select){
 				for(String str : l){
 					str = str.replaceAll("/", "\\.");
+					if(!isInPath){
+						str = "file:"+showSelectedFile.getText()+":"+str;
+					}
 					String name = str.substring(str.lastIndexOf(".")+1, str.length());
 					if(!pro.containsKey(name)){
 					   choiceBox.getItems().add(name);
@@ -191,6 +194,9 @@ public class SelectAlg extends Stage {
 			  }else{
 				String str = (String) selectClass.getValue();
 				str = str.replaceAll("/","\\.");
+				if(!isInPath){
+					str = "file:"+showSelectedFile.getText()+":"+str;
+				}
 				String name = str.substring(str.lastIndexOf(".")+1, str.length());
 				if(!pro.containsKey(name)){
 					   choiceBox.getItems().add(name);

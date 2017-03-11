@@ -17,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -31,6 +32,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -330,7 +332,6 @@ public class SelectShowMethod extends Stage {
 			return index;
 		}
 		
-		
 		public void drawByMethodList(List ml){
 			 ObservableList<String> names = FXCollections.observableArrayList();
 				
@@ -343,7 +344,7 @@ public class SelectShowMethod extends Stage {
 			 textShow.getItems().add("基分类方法: "+((Log)ml.get(0)).getMethod().getBase());
 			 
 			 textShow.getItems().add("");
-			 DecimalFormat    df   = new DecimalFormat("######0.00");
+			 DecimalFormat df = new DecimalFormat("######0.00");
 			 
 			 xlabel.setCategories(names);
 			 for(int i = 0 ; i < ml.size() ; i++){
@@ -385,8 +386,12 @@ public class SelectShowMethod extends Stage {
 			
 			BorderPane bp = new BorderPane();
 			bp.setCenter(tx);
+			GridPane gp = new GridPane();
 			Button outputLog = new Button("导出日志");
-			bp.setBottom(outputLog);
+			gp.add(outputLog, 0, 0);
+			gp.setAlignment(Pos.BASELINE_RIGHT);
+			bp.setBottom(gp);
+//			bp.setBottom(outputLog);
 			
 			tb.setContent(bp);
 			
@@ -406,6 +411,7 @@ public class SelectShowMethod extends Stage {
 					}
 				}
 			});
+			
 			tp.getTabs().add(tb);
 			textShow.getItems().add("基分类方法: "+((Log)(((List)ll.get(0)).get(0))).getMethod().getBase());
 			tx.appendText("====================================\n");
@@ -413,7 +419,6 @@ public class SelectShowMethod extends Stage {
 			tx.appendText("====================================\n");
 			tx.appendText("\n\n");
 			tx.setEditable(false);
-			
 			
 			ObservableList<String> names = FXCollections.observableArrayList();
 			names.addAll(new String[]{"TP","FP","Precision","Recall","FMeasure","Gmeans","Acc","AUC"});
@@ -509,29 +514,39 @@ public class SelectShowMethod extends Stage {
 					    		tx.appendText("FP-C"+i+"		");
 					    		break;
 					    	case 2:
-					    		tx.appendText("Precision-C"+i+"			");
+					    		tx.appendText("Precision-C"+i+"		");
 					    		break;
 					    	case 3:
-					    		tx.appendText("Recall-C"+i+"			");
+					    		tx.appendText("Recall-C"+i+"		");
 					    		break;
 					    	case 4:
-					    		tx.appendText("FMeasure-C"+i+"			");
+					    		tx.appendText("FMeasure-C"+i+"		");
 					    		break;
 					    	case 5:
-					    		tx.appendText("Gmean-C"+i+"			");
+					    		tx.appendText("Gmean-C"+i+"		");
 					    		break;
 					    	case 6:
-					    		tx.appendText("Acc-C"+i+"			");
+					    		tx.appendText("Acc-C"+i+"		");
 					    		break;
 					    	case 7:
-					    		tx.appendText("AUC-C"+i+"			");
+					    		tx.appendText("AUC-C"+i+"		");
 					    		break;
 					    	}
 					    }
 			    }
+			    
 			tx.appendText("\n");
 			for(int j = 0 ; j < finRes.length ; j ++){
-				tx.appendText(methodNameList.get(j)+"			");
+				tx.appendText(methodNameList.get(j)+"		");
+				if(methodNameList.get(j).length() == 9){
+					tx.appendText("	");
+				}
+				if(methodNameList.get(j).length() <= 10){
+					tx.appendText("				");
+				}
+				else if(methodNameList.get(j).length() < 26){
+					tx.appendText("	");
+				}
 				for(int k = 0 ; k < finRes[0].length ; k++){
 					tx.appendText(df.format(finRes[j][k])+"			");
 				}

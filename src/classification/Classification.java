@@ -1,8 +1,15 @@
 package classification;
 
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import Classifier.SmoteBagging;
+import application.Main;
 import application.Method;
 import bean.DataSet;
 import bean.EvaluationInfo;
@@ -106,7 +113,57 @@ public class Classification {
 	public List<EvaluationInfo> predict(Method method,String base, int times,EvaluationInfo ei)  throws Exception{
 		String predict_result = "";
 		BasicClassification use_classification = new SimpleClassification(data);
-		classifier = (Classifier) Class.forName(base).newInstance();
+		if(base.startsWith("file:")){
+			String key = base.substring(base.lastIndexOf(".")+1,base.length());
+			if(Main.classMap.containsKey(key)){
+				classifier = (Classifier) ((Class) Main.classMap.get(key)).newInstance();
+			}else{
+				 String jarFilePath = base.substring(base.indexOf(":")+1, base.lastIndexOf(":"));
+				 File jarFile = new File(jarFilePath);
+				 
+				 
+				    java.lang.reflect.Method md = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);  
+				    boolean accessible = md.isAccessible();     // 获取方法的访问权限  
+				    try {  
+				        if (accessible == false) {  
+				            md.setAccessible(true);     // 设置方法的访问权限  
+				        }  
+				        // 获取系统类加载器  
+				            URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();  
+				            URL url = jarFile.toURI().toURL();  
+				            try {  
+				                md.invoke(classLoader, url);    
+				            } catch (Exception e) {  
+				            }  
+				    } finally {  
+				        md.setAccessible(accessible);  
+				    }  
+				
+				 String sk =  base.substring(base.lastIndexOf(":")+1,base.length());
+//				 while(enums.hasMoreElements()){
+//					 JarEntry je = (JarEntry) enums.nextElement();
+//					 String name = je.getName();
+//						try {
+//							if(name.endsWith(".class")){
+//								  
+//				              URL url1 = (new File(jarFilePath)).toURL();  
+//	                         URLClassLoader myClassLoader1 = new URLClassLoader(new URL[] { url1 }, Thread.currentThread()  
+//	                        .getContextClassLoader());  
+//	                          
+//	                          Class<?> myClass1 = myClassLoader1.loadClass(name.substring(0, name.length()-6).replaceAll("/", "\\."));
+//	                          if(name.substring(0, name.length()-6).replaceAll("/", "\\.").equals(sk)){
+//	                                classifier = (Classifier) myClass1.newInstance();
+//	                          }
+//							}
+//						}catch(ClassNotFoundException e){
+//							
+//						}
+//				 }
+				    classifier = (Classifier) Class.forName(sk).newInstance();
+			}
+		}else{
+		    classifier = (Classifier) Class.forName(base).newInstance();
+		}
 //		if(!isIn){
 //			if(ensemble.equals("Bagging")){
 //				if(simple.equals("SMOTE")){
@@ -188,15 +245,15 @@ public class Classification {
 					break;
 				//Bagging embedded OverSample
 				case 5:
-//					use_classification = new BaggingEmbeddedOverSimple(data);
+					use_classification = new BaggingEmbeddedOverSimple(data);
 					break;
 				//Bagging over OverSample
 				case 6:
-					//use_classification = new BaggingOverOverSample(data);
+					use_classification = new BaggingOverOverSample(data);
 					break;
 				//Boosting embedded OverSample
 				case 7:
-					//use_classification = new BoostingEmbeddedOverSimple(data);
+					use_classification = new BoostingEmbeddedOverSimple(data);
 					break;
 				//Boosting over OverSample
 				case 8:

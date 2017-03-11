@@ -100,6 +100,7 @@ public class Start {
 				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 				Log log;
 				String bs = base.get(i);
+
 				log = new Log(sdf.format(d)+"-"+bs.substring(bs.lastIndexOf("."), bs.length()));
 				
 				Util util = new Util();
@@ -137,7 +138,7 @@ public class Start {
 				final int curr = totle;
 	    		Platform.runLater(new Runnable() {
 							@Override
-							public void run() {
+						public void run() {
 								// TODO Auto-generated method stub
 								pb.setProgress((double)curr/((project.size())*(methodList.size())*(base.size())));
 								resultView.appendText(log.getLogShow());
