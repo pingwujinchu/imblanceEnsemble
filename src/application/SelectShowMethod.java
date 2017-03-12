@@ -538,7 +538,7 @@ public class SelectShowMethod extends Stage {
 			tx.appendText("\n");
 			for(int j = 0 ; j < finRes.length ; j ++){
 				tx.appendText(methodNameList.get(j)+"		");
-				if(methodNameList.get(j).length() == 9){
+				if(methodNameList.get(j).length() <= 9){
 					tx.appendText("	");
 				}
 				if(methodNameList.get(j).length() <= 10){
