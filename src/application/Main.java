@@ -76,7 +76,6 @@ public class Main extends Application{
 	public Button start;
 	@FXML ListView listView;
 
-
 	@FXML TextArea resultView;
 	@FXML ProgressBar pb;
 	@FXML ListView selectShow;
