@@ -98,7 +98,7 @@ public class Main extends Application{
 			Scene scene = new Scene(root,1000,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("imEnsamble");
+			primaryStage.setTitle("imEnsemble");
 			stage = primaryStage;
 		    
 		    ChoiceBox chbase = (ChoiceBox) root.lookup("#base");
@@ -244,7 +244,7 @@ public class Main extends Application{
 			  File allF = new File(fileName.getText());
 			  File[] files = allF.listFiles();
 			  for(int i = 0 ; i < files.length ; i++){
-				  if(files[i].getName().endsWith(".arff")){
+				  if(files[i].getName().endsWith(".arff")||files[i].getName().endsWith(".csv")){
 					  dataSetList.add(files[i].getAbsolutePath());
 				  }
 			  }
@@ -309,7 +309,6 @@ public class Main extends Application{
 						  if(value.contains("_")){
 							  String allStr [] = value.split("_");
 							  String currStr = allStr[0]+" "+allStr[1]+" "+allStr[2];
-							  System.out.println(methodMap.size());
 							  int currIndex = (Integer)methodMap.get(currStr);
 							  currMd = new Method(currIndex, allStr[2], allStr[1], allStr[0]);
 						  }else{

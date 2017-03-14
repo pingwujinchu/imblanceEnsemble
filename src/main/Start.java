@@ -22,6 +22,11 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import weka.core.AttributeStats;
 import weka.core.Instances;
+import weka.core.converters.CSVLoader;
+import weka.filters.Filter;
+import weka.filters.supervised.attribute.Discretize;
+import weka.filters.unsupervised.attribute.Normalize;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 
 public class Start {
 	public static volatile boolean finish = false;
@@ -107,10 +112,26 @@ public class Start {
 				String measure_name = "project, method, classifier, accuracy, recall-0, recall-1, precision-0, precision-1, fMeasure-0, fMeasure-1, gmean, auc \n";
 		//		util.saveResult(measure_name, output_file);
 				String predict_result = "";
-				
-				FileReader fr = new FileReader(new File(project.get(k)));
-				BufferedReader br = new BufferedReader(fr);
-				Instances data = new Instances(br);
+				Instances data = null;
+				if(project.get(k).endsWith(".arff")){
+				   FileReader fr = new FileReader(new File(project.get(k)));
+				   BufferedReader br = new BufferedReader(fr);
+				   data = new Instances(br);
+				}
+				if(project.get(k).endsWith(".csv")){
+					CSVLoader cl = new CSVLoader();
+					cl.setSource(new File(project.get(k)));
+					data = cl.getDataSet();
+					Filter filter = new Discretize();
+					Filter normalFilter = new NumericToNominal();
+					try {
+						data  = filter.useFilter(data, filter);
+						data = normalFilter.useFilter(data, normalFilter);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				data.setClassIndex(data.numAttributes()-1);
 				DataSet ds = new DataSet();
 				ds.setDataSetName(new File(project.get(k)).getName());

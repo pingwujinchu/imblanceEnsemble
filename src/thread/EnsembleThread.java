@@ -86,7 +86,6 @@ public class EnsembleThread implements Runnable {
 				public void run() {
 					// TODO Auto-generated method stub
 					start.setText("¿ªÊ¼");
-					
 				}
 			});
 			e.printStackTrace();

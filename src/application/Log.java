@@ -107,6 +107,37 @@ public class Log implements Observable{
 		return result;
 	}
 	
+	public String getStr(int index){
+		String result = "";
+		switch(index){
+		   case 0:
+			   result = "TPR";
+			   break;
+		   case 1:
+			   result = "FPR";
+			   break;
+		   case 2:
+			   result = "Precision";
+			   break;
+		   case 3:
+			   result = "Recall";
+			   break;
+		   case 4:
+			   result = "FMeasure";
+			   break;
+		   case 5:
+			   result = "Gmeans";
+			   break;
+		   case 6:
+			   result = "Acc";
+			   break;
+		   case 7:
+			   result = "AUC";
+			   break;
+		}
+		return result;
+	}
+	
 	//获取日志信息
 	public String getResultInfo(Log log){
 		StringBuilder strBuilder = new StringBuilder();
